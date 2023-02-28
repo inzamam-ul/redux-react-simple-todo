@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import doubleTickImg from "../assets/images/double-tick.png";
 import noteImg from "../assets/images/notes.png";
 import plusImg from "../assets/images/plus.png";
-import { added, allCompleted, clearCompleted } from "../redux/todos/actions";
+import { allCompleted, clearCompleted } from "../redux/todos/actions";
+import addTodo from "../redux/todos/thunk/addTodo";
 const Header = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState();
@@ -14,8 +15,8 @@ const Header = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(added(input));
-    setInput("");
+    dispatch(addTodo(input));
+    e.target.reset();
   };
 
   const handleCompleteAll = () => {
@@ -34,7 +35,6 @@ const Header = () => {
       >
         <img src={noteImg} className="w-6 h-6" alt="Add todo" />
         <input
-          value={input}
           onChange={handleInput}
           type="text"
           placeholder="Type your todo"

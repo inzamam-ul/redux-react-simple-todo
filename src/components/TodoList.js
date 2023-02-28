@@ -1,10 +1,16 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import fetchTodos from "../redux/todos/thunk/fetchTodos";
 import Todo from "./Todo";
 
 const TodoList = () => {
+  const dispatch = useDispatch();
   const todos = useSelector((state) => state.todos);
   const filters = useSelector((state) => state.filters);
+
+  useEffect(() => {
+    dispatch(fetchTodos);
+  }, [dispatch]);
 
   const filterByStatus = (todo) => {
     const { status } = filters;
@@ -32,7 +38,7 @@ const TodoList = () => {
         .filter(filterByStatus)
         .filter(filterByColors)
         .map((todo) => (
-          <Todo key={todo.id} todo={todo} />
+          <Todo key={todo._id} todo={todo} />
         ))}
     </div>
   );

@@ -4,20 +4,20 @@ import {
   CLEARCOMPLETED,
   COLORSELECTED,
   DELETED,
+  LOAD,
   TOGGLED,
 } from "./actionTypes";
 import { initialState } from "./initialState";
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOAD:
+      return action.payload;
     case ADDED:
-      return [
-        ...state,
-        { id: Date.now(), text: action.payload, completed: false },
-      ];
+      return [...state, { ...action.payload }];
     case TOGGLED:
       return state.map((todo) => {
-        if (todo.id === action.payload) {
+        if (todo._id === action.payload) {
           return { ...todo, completed: !todo.completed };
         }
         return todo;
@@ -25,14 +25,14 @@ const reducer = (state = initialState, action) => {
 
     case COLORSELECTED:
       return state.map((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo._id === action.payload.id) {
           return { ...todo, color: action.payload.color };
         }
         return todo;
       });
 
     case DELETED:
-      return state.filter((todo) => todo.id !== action.payload);
+      return state.filter((todo) => todo._id !== action.payload);
 
     case ALLCOMPLETED:
       return state.map((todo) => {

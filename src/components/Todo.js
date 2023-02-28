@@ -1,32 +1,35 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import cancleImg from "../assets/images/cancel.png";
-import { colorSelected, deleted, toggled } from "../redux/todos/actions";
-const Todo = ({ todo: { id, text, completed, color } }) => {
+import deleteTodo from "../redux/todos/thunk/deleteTodo";
+import updateTodoColor from "../redux/todos/thunk/updateTodoColor";
+import updateTodoStatus from "../redux/todos/thunk/updateTodoStatus";
+const Todo = ({ todo: { _id, text, completed, color } }) => {
   const dispatch = useDispatch();
+
   const handleStatusChange = (todoId) => {
-    dispatch(toggled(todoId));
+    dispatch(updateTodoStatus(todoId, completed));
   };
 
   const handleColorChange = (todoId, color) => {
-    dispatch(colorSelected(todoId, color));
+    dispatch(updateTodoColor(todoId, color));
   };
 
   const handleDelete = (todoId) => {
-    dispatch(deleted(todoId));
+    dispatch(deleteTodo(todoId));
   };
 
   return (
     <div className="flex justify-start items-center p-2 hover:bg-gray-100 hover:transition-all space-x-4 border-b border-gray-400/20 last:border-0">
       <div
-        className={`rounded-full bg-white border-2 border-gray-400 w-5 h-5 flex flex-shrink-0 justify-center items-center mr-2 ${
+        className={`relative rounded-full bg-white border-2 border-gray-400 w-5 h-5 flex flex-shrink-0 justify-center items-center mr-2 ${
           completed && "border-green-500 focus-within:border-green-500"
         }`}
       >
         <input
           type="checkbox"
           checked={completed}
-          onChange={() => handleStatusChange(id)}
+          onChange={() => handleStatusChange(_id)}
           className="opacity-0 absolute rounded-full"
         />
         {completed && (
@@ -44,28 +47,28 @@ const Todo = ({ todo: { id, text, completed, color } }) => {
       </div>
 
       <div
-        onClick={() => handleColorChange(id, "green")}
+        onClick={() => handleColorChange(_id, "green")}
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer hover:bg-green-500 border-green-500 ${
           color === "green" && "bg-green-500"
         }`}
       ></div>
 
       <div
-        onClick={() => handleColorChange(id, "yellow")}
+        onClick={() => handleColorChange(_id, "yellow")}
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer hover:bg-yellow-500 border-yellow-500 ${
           color === "yellow" && "bg-yellow-500"
         }`}
       ></div>
 
       <div
-        onClick={() => handleColorChange(id, "red")}
+        onClick={() => handleColorChange(_id, "red")}
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer hover:bg-red-500 border-red-500 ${
           color === "red" && " bg-red-500"
         }`}
       ></div>
 
       <img
-        onClick={() => handleDelete(id)}
+        onClick={() => handleDelete(_id)}
         src={cancleImg}
         className="flex-shrink-0 w-4 h-4 ml-2 cursor-pointer hover:bg-gray-300 rounded-full"
         alt="Cancel"
